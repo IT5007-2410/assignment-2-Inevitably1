@@ -12,10 +12,14 @@ const initialTravellers = [
 
 
 function TravellerRow(props) {
-  {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
+  const currentTraveller = props.traveller;
   return (
     <tr>
 	  {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+      <td>{currentTraveller.id}</td>
+      <td>{currentTraveller.name}</td>
+      <td>{currentTraveller.phone}</td>
+      <td>{currentTraveller.bookingTime.toLocaleString()}</td>
     </tr>
   );
 }
@@ -23,6 +27,9 @@ function TravellerRow(props) {
 function Display(props) {
   
 	/*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
+  const rows = props.travellers.map((traveller) =>
+    <TravellerRow key={traveller.id} traveller={traveller} />
+  );
 
   return (
     <table className="bordered-table">
@@ -36,7 +43,8 @@ function Display(props) {
         </tr>
       </thead>
       <tbody>
-        {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/
+        rows}
       </tbody>
     </table>
   );
@@ -86,6 +94,7 @@ class Delete extends React.Component {
     const form = document.forms.deleteTraveller;
     console.log(form.travellername.value);
     this.props.delfunction(form.travellername.value);
+    form.travellername.value = "";
 
   }
 
@@ -173,7 +182,7 @@ class TicketToRide extends React.Component {
 		{/*Only one of the below four divisions is rendered based on the button clicked by the user.*/}
 		{/*Q2 and Q6. Code to call Instance that draws Homepage. Homepage shows Visual Representation of free seats.*/}
 		{/*Q3. Code to call component that Displays Travellers.*/}
-		
+		<Display travellers={this.state.travellers} />
 		{/*Q4. Code to call the component that adds a traveller.*/}
     <Add bookfunction={this.bookTraveller} />
 		{/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
