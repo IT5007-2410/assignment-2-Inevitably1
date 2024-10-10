@@ -2,11 +2,18 @@
 const initialTravellers = [
   {
     id: 1, name: 'Jack', phone: 88885555,
-    bookingTime: new Date(),
+    bookingTime: new Date(), origin: 'Singapore',
+    destination: 'Bangkok',
+    departureDate: '2024-10-30',
+    seatNumber: '1A'
   },
   {
     id: 2, name: 'Rose', phone: 88884444,
     bookingTime: new Date(),
+    origin: 'Bangkok',
+    destination: 'Singapore',
+    departureDate: '2024-11-10',
+    seatNumber: '2B'
   },
 ];
 
@@ -20,6 +27,10 @@ function TravellerRow(props) {
       <td>{currentTraveller.name}</td>
       <td>{currentTraveller.phone}</td>
       <td>{currentTraveller.bookingTime.toLocaleString()}</td>
+      <td>{currentTraveller.origin}</td>
+      <td>{currentTraveller.destination}</td>
+      <td>{currentTraveller.departureDate}</td>
+      <td>{currentTraveller.seatNumber}</td>
     </tr>
   );
 }
@@ -40,6 +51,10 @@ function Display(props) {
           <th>Name</th>
           <th>Phone</th>
           <th>Booking Time</th>
+          <th>Origin</th>
+          <th>Destination</th>
+          <th>Departure Date</th>
+          <th>Seat</th>
         </tr>
       </thead>
       <tbody>
@@ -63,10 +78,18 @@ class Add extends React.Component {
     const passenger = {
       name: form.travellername.value,
       phone: form.travellerphone.value,
+      origin: form.travellerorigin.value,
+      destination: form.travellerdestination.value,
+      departureDate: form.travellerdate.value,
+      seatNumber: form.travellerseat.value
     };
     this.props.bookfunction(passenger);
     form.travellername.value = ""; 
     form.travellerphone.value = "";
+    form.travellerorigin.value = "";
+    form.travellerdestination.value = "";
+    form.travellerdate.value = "";
+    form.travellerseat.value = "";
 
   }
 
@@ -75,7 +98,11 @@ class Add extends React.Component {
       <form name="addTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
         <input type="text" name="travellername" placeholder="Name" required />
-        <input type="text" name="travellerphone" placeholder="Phone" required />
+        <input type="number" name="travellerphone" placeholder="Phone" required />
+        <input type="text" name="travellerorigin" placeholder="Origin" required />
+        <input type="text" name="travellerdestination" placeholder="Destination" required />
+        <input type="date" name="travellerdate" placeholder="Departure Date" required />
+        <input type="text" name="travellerseat" placeholder="Seat" required />
         <button>Add</button>
       </form>
     );
@@ -92,9 +119,10 @@ class Delete extends React.Component {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
     const form = document.forms.deleteTraveller;
-    console.log(form.travellername.value);
-    this.props.delfunction(form.travellername.value);
-    form.travellername.value = "";
+    const travellerId = parseInt(form.travellerid.value, 10);
+    console.log("Delete function called", travellerId);
+    this.props.delfunction(travellerId);
+    form.travellerid.value = "";
 
   }
 
@@ -102,7 +130,7 @@ class Delete extends React.Component {
     return (
       <form name="deleteTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-	<input type="text" name="travellername" placeholder="Name" />
+	      <input type="number" name="travellerid" placeholder="Traveller ID" />
         <button>Delete</button>
       </form>
     );
@@ -147,7 +175,7 @@ class Homepage extends React.Component {
 class TicketToRide extends React.Component {
   constructor() {
     super();
-    this.state = { travellers: initialTravellers, selector: 1, nextId: initialTravellers.length + 1, totalSeats: 5 };
+    this.state = { travellers: initialTravellers, selector: 1, nextId: initialTravellers.length + 1, totalSeats: 10 };
     this.bookTraveller = this.bookTraveller.bind(this);
     this.deleteTraveller = this.deleteTraveller.bind(this);
   }
@@ -179,6 +207,10 @@ class TicketToRide extends React.Component {
       name: passenger.name,
       phone: passenger.phone,
       bookingTime: new Date(),
+      origin: passenger.origin,
+      destination: passenger.destination,
+      departureDate: passenger.departureDate,
+      seatNumber: passenger.seatNumber
     };
     console.log('current traveller:', this.state.travellers);
     this.setState((prevState) => ({
@@ -188,13 +220,13 @@ class TicketToRide extends React.Component {
   }
 
 
-  deleteTraveller(passenger) {
+  deleteTraveller(travellerId) {
 	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
-    console.log("Delete function called",passenger);
+    // console.log("Delete function called",passenger);
     const prevLength = this.state.travellers.length;
     var newlist = [];
     this.state.travellers.forEach(element => {
-        if (element.name != passenger) {
+        if (element.id != travellerId) {
             newlist.push(element);
         }
     });
