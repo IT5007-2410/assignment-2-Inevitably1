@@ -51,6 +51,7 @@ class Add extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+
   }
 
   render() {
@@ -73,6 +74,10 @@ class Delete extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
+    const form = document.forms.deleteTraveller;
+    console.log(form.travellername.value);
+    this.props.delfunction(form.travellername.value);
+
   }
 
   render() {
@@ -107,7 +112,7 @@ class TicketToRide extends React.Component {
 
   setSelector(value)
   {
-  	/*Q2. Function to set the value of component selector variable based on user's button click.*/
+  	/*Q2. Function to set the value of component selector variable based on user's button click..*/
   }
   componentDidMount() {
     this.loadData();
@@ -125,6 +130,15 @@ class TicketToRide extends React.Component {
 
   deleteTraveller(passenger) {
 	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
+    console.log("Delete function called",passenger);
+    var newlist = [];
+    this.state.travellers.forEach(element => {
+        if (element.name != passenger) {
+            newlist.push(element);
+        }
+    });
+    
+    this.setState({ travellers: newlist });
   }
   render() {
     return (
@@ -140,6 +154,7 @@ class TicketToRide extends React.Component {
 		
 		{/*Q4. Code to call the component that adds a traveller.*/}
 		{/*Q5. Code to call the component that deletes a traveller based on a given attribute.*/}
+    <Delete delfunction={this.deleteTraveller}/>
 	</div>
       </div>
     );
