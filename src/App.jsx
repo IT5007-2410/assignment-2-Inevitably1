@@ -117,10 +117,29 @@ class Homepage extends React.Component {
     const totalSeats = this.props.totalSeats;
     const occupiedSeats = this.props.travellers.length;
     const freeSeats = totalSeats - occupiedSeats;
+    const seatsMap = [];
+    for (let i = 0; i < totalSeats; i++) {
+      if (i < occupiedSeats) {
+        seatsMap.push(
+          <button key={i} style={{ backgroundColor: 'grey', width: '50px', height: '50px',margin: '5px'}}>
+          </button>
+        );
+      } else {
+        seatsMap.push(
+          <button key={i} style={{ backgroundColor: 'green', width: '50px', height: '50px',margin: '5px'}}>
+          </button>
+        );
+      }
+    }
 
     return (
       <div>
-        <p>{freeSeats} seats are available.</p>
+        <p>Total seats: {totalSeats}</p>
+        <p>Occupied seats: {occupiedSeats}</p>
+        <p>Free seats: {freeSeats}</p>
+        <div>
+          {seatsMap}
+        </div>
       </div>
     );
   }
@@ -128,7 +147,7 @@ class Homepage extends React.Component {
 class TicketToRide extends React.Component {
   constructor() {
     super();
-    this.state = { travellers: initialTravellers, selector: 1, nextId: initialTravellers.length + 1, totalSeats: 10 };
+    this.state = { travellers: initialTravellers, selector: 1, nextId: initialTravellers.length + 1, totalSeats: 5 };
     this.bookTraveller = this.bookTraveller.bind(this);
     this.deleteTraveller = this.deleteTraveller.bind(this);
   }
